@@ -1,0 +1,75 @@
+---
+title: "R"
+format: 
+  revealjs:
+    preview-links: auto
+    theme: simple
+editor: visual
+---
+
+# R Camp in This Winter
+
+------------------------------------------------------------------------
+
+## Statistical program
+
+- [S, S-Plus, R](https://stat.ethz.ch/~www/SandR.html)
+    
+```{r}
+#| echo: true
+
+data("iris")
+aov(Sepal.Length ~ Species, data = iris) |> summary()
+```
+
+---
+
+## Bioinformatics
+
+-   [Bioconductor](https://www.bioconductor.org/)
+  - https://www.bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html
+
+---
+
+-   Data Science
+    -   [R4DS](https://r4ds.had.co.nz/)
+
+------------------------------------------------------------------------
+
+A data analysis is **reproducible** if all the information (data, files, etc.) required is available for someone else to re-do your entire analysis. This includes:
+
+-   Data available
+-   All code for cleaning raw data
+-   All code and software (specific versions, packages) for analysis
+
+::: aside
+https://geanders.github.io/RProgrammingForResearch/
+:::
+
+------------------------------------------------------------------------
+
+Some advantages of making your research reproducible are:
+
+-   You can (easily) figure out what you did six months from now.
+-   You can (easily) make adjustments to code or data, even early in the process, and re-run all analysis.
+-   When you're ready to publish, you can (easily) do a last double-check of your full analysis, from cleaning the raw data through generating figures and tables for the paper.
+-   You can pass along or share a project with others.
+-   You can give useful code examples to people who want to extend your research.
+
+------------------------------------------------------------------------
+
+::: r-fit-text
+Some of the steps required to making research reproducible are:
+
+-   All your raw data should be saved in the project directory. You should have clear documentation on the source of all this data.
+-   Scripts should be included with all the code used to clean this data into the data set(s) used for final analyses and to create any figures and tables.
+-   You should include details on the versions of any software used in analysis (for R, this includes the version of R as well as versions of all packages used).
+-   If possible, there should be no "by hand" steps used in the analysis; instead, all steps should be done using code saved in scripts. For example, you should use a script to clean data, rather than cleaning it by hand in Excel. If any "non-scriptable" steps are unavoidable, you should very clearly document those steps.
+:::
+
+------------------------------------------------------------------------
+
+-   Documentation
+    -   RMarkdown
+    -   Quarto
+-   Git
