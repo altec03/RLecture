@@ -438,6 +438,20 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li><a href="https://www.tidymodels.org/">Tidymodels</a></li>
 </ul>
 </section>
+<section id="shiny-web-application" class="slide level2">
+<h2>Shiny (Web application)</h2>
+<ul>
+<li><a href="http://160.1.17.93/Interpretation/">NGS interpretation</a></li>
+<li><a href="http://160.1.17.93/cmcNgsShiny/">NGS Data</a></li>
+</ul>
+</section>
+<section id="documentation" class="slide level2">
+<h2>Documentation</h2>
+<ul>
+<li><a href="https://extraordinary-tulumba-269604.netlify.app/docs/">Website</a></li>
+<li><a href="https://pkgs.rstudio.com/rticles/">Manuscript</a></li>
+</ul>
+</section>
 <section class="slide level2">
 
 <p>A data analysis is <strong>reproducible</strong> if all the information (data, files, etc.) required is available for someone else to re-do your entire analysis. This includes:</p>
@@ -499,6 +513,26 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li>Quarto</li>
 </ul></li>
 <li>Git</li>
+</ul>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>iris<span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Species, <span class="at">y=</span>Sepal.Length))<span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">ylab</span>(<span class="st">"Sepal Length"</span>)<span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>  ggpubr<span class="sc">::</span><span class="fu">theme_pubclean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="RLecture_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<section id="git" class="slide level2">
+<h2>Git</h2>
+<ul>
+<li><a href="https://git-scm.com/">git</a></li>
+<li><a href="https://github.com/">github</a></li>
+<li><a href="https://github.com/Jkang-alien/RLecture">github RLecture repository</a></li>
 </ul>
 <div class="footer footer-default">
 

@@ -40,6 +40,14 @@ aov(Sepal.Length ~ Species, data = iris) |> summary()
 -   [R4DS](https://r4ds.had.co.nz/)
 -   [Tidymodels](https://www.tidymodels.org/)
     
+## Shiny (Web application)
+-   [NGS interpretation](http://160.1.17.93/Interpretation/)
+-   [NGS Data](http://160.1.17.93/cmcNgsShiny/)
+
+## Documentation
+-   [Website](https://extraordinary-tulumba-269604.netlify.app/docs/)
+-   [Manuscript](https://pkgs.rstudio.com/rticles/)
+
 ---
 
 A data analysis is **reproducible** if all the information (data, files, etc.) required is available for someone else to re-do your entire analysis. This includes:
@@ -88,3 +96,22 @@ Some of the steps required to making research reproducible are:
     -   RMarkdown
     -   Quarto
 -   Git
+
+## Results
+
+```{r}
+#| echo: true
+
+library(ggplot2)
+iris|>
+  ggplot(aes(x=Species, y=Sepal.Length))+
+  geom_boxplot()+
+  ylab("Sepal Length")+
+  ggpubr::theme_pubclean()
+```
+
+## Git
+
+-   [git](https://git-scm.com/)
+-   [github](https://github.com/)
+-   [github RLecture repository](https://github.com/Jkang-alien/RLecture)
