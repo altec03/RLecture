@@ -14,12 +14,11 @@ editor: visual
 ---
 
 ![](img/EmLN0Q-XIAAFHEW.jpg)
----
 
 ## Statistical program
 
-- [S, S-Plus, R](https://stat.ethz.ch/~www/SandR.html)
-    
+-   [S, S-Plus, R](https://stat.ethz.ch/~www/SandR.html)
+
 ```{r}
 #| echo: true
 
@@ -27,28 +26,32 @@ data("iris")
 aov(Sepal.Length ~ Species, data = iris) |> summary()
 ```
 
----
+------------------------------------------------------------------------
 
 ## Bioinformatics
 
 -   [Bioconductor](https://www.bioconductor.org/)
-  - [maftools](https://www.bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)
+-   [maftools](https://www.bioconductor.org/packages/devel/bioc/vignettes/maftools/inst/doc/maftools.html)
 
----
+
+------------------------------------------------------------------------
 
 ## Data Science
+
 -   [R4DS](https://r4ds.had.co.nz/)
 -   [Tidymodels](https://www.tidymodels.org/)
-    
+
 ## Shiny (Web application)
+
 -   [NGS interpretation](http://160.1.17.93/Interpretation/)
 -   [NGS Data](http://160.1.17.93/cmcNgsShiny/)
 
 ## Documentation
+
 -   [Website](https://extraordinary-tulumba-269604.netlify.app/docs/)
 -   [Manuscript](https://pkgs.rstudio.com/rticles/)
 
----
+------------------------------------------------------------------------
 
 A data analysis is **reproducible** if all the information (data, files, etc.) required is available for someone else to re-do your entire analysis. This includes:
 
@@ -81,15 +84,15 @@ Some of the steps required to making research reproducible are:
 -   If possible, there should be no "by hand" steps used in the analysis; instead, all steps should be done using code saved in scripts. For example, you should use a script to clean data, rather than cleaning it by hand in Excel. If any "non-scriptable" steps are unavoidable, you should very clearly document those steps.
 :::
 
-## Data processing 
+## Data processing
 
-- Data Wrangling
-  - Right data form
-- Data Cleaning
-  - Find and correct inaccurate data
-- Data Mining
-  - Find meanings
-  
+-   Data Wrangling
+    -   Right data form
+-   Data Cleaning
+    -   Find and correct inaccurate data
+-   Data Mining
+    -   Find meanings
+
 ## Sharing
 
 -   Documentation
