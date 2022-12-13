@@ -2,6 +2,7 @@
 title: "R"
 format: 
   revealjs:
+    self-contained: true
     preview-links: auto
     theme: simple
 editor: visual
