@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "R Camp 2022 Winter"
 format: revealjs
 editor: visual
 execute: 
@@ -27,6 +27,38 @@ clinicalDate |>
   ggplot2::ggplot(aes(x=year_month)) +
   #geom_bar()+
   geom_line(stat = "count")+
+  xlab("Year (Monthly)")+
+  ylab("Number of NGS test \n (ThermoFisher)")+
+  theme_minimal()
+```
+
+
+## Number of NGS test by Cancer Types
+```{r}
+
+clinicalTumorType <- clinicalDate |>
+  mutate(tumor_type = as.factor(tumor_type))
+
+
+clinicalTumorType <- clinicalDate |>
+  mutate(tumor_type = as.factor(tumor_type),
+         tumor_type = str_to_lower(tumor_type),
+         cancer_type = case_when(str_detect(tumor_type, "colo|rectal") ~ "Colorectal Cancer",
+                                 str_detect(tumor_type, "lung") ~ "Lung Cancer",
+                                 str_detect(tumor_type, "glioblastoma|glioma|ependymoma|astrocytoma") ~ "Brain Cancer",
+                                 str_detect(tumor_type, "pancrea") ~ "Pancreas Cancer",
+                                 str_detect(tumor_type, "gastric") ~ "Stomach Cancer",
+                                 str_detect(tumor_type, "breast") ~ "Breast Cancer",
+                                 is.na(tumor_type) ~ NA_character_,
+                                 TRUE ~ "Other Cancer"),
+         cancer_type = as.factor(cancer_type))
+
+clinicalTumorType |>
+  filter(year_month > "2020-10-01") |>
+  ggplot2::ggplot(aes(x=year_month)) + #, color = cancer_type)) +
+  #geom_bar()+
+  geom_bar(stat = "count")+
+  facet_wrap(vars(cancer_type), ncol = 3)+
   xlab("Year (Monthly)")+
   ylab("Number of NGS test \n (ThermoFisher)")+
   theme_minimal()
