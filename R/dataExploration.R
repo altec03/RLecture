@@ -1,6 +1,5 @@
 library(tidyverse)
 
-
 clinical <- readr::read_csv(here::here("data/Pathology_NGS_1st.csv"), na = "NULL")
 
 library(lubridate)
@@ -10,7 +9,7 @@ clinicalDate <- clinical |>
          prescription_date = ymd(prescription_date),
          year = lubridate::year(prescription_date),
          month = lubridate::month(prescription_date),
-         year_month = floor_date(prescription_date, "1 month"))
+         year_month = floor_date(prescription_date, "bimonth"))
 
 clinicalDate |>
   ggplot(aes(x=age))+
@@ -19,7 +18,6 @@ clinicalDate |>
 clinicalDate|>
   group_by(year_month)|>
   summarise(n=n(), meanAge = mean(age, na.rm = TRUE))
-
 
 clinicalDate |>
   ggplot2::ggplot(aes(x=year_month)) +
@@ -71,12 +69,15 @@ dataMutation <- mutation |>
   select(age, gender, pathological_dx, cancer_type, starts_with("tumor"), msiscore, 5:11)
 
 dataMutation|>
-  mutate(gene = as.factor(gene),
-         gene = fct_lump_min(gene, 10))|>
-  filter(gene != "Other")|>
+  mutate(gene = as.factor(gene))|>
+  group_by(cancer_type)|>
+  mutate(gene = fct_lump_min(gene, 10))|>
   count(gene)|>
-  ggplot(aes(tidytext::reorder_within(gene, n, cancer_type)))+
-  geom_bar() +
+  ungroup()|>
+  mutate(gene = tidytext::reorder_within(gene, n, cancer_type))|>
+  filter(gene != "Other")|>
+  ggplot(aes(x = gene, y= n))+
+  geom_col() +
   facet_wrap(~cancer_type, scales = "free_y") +
   tidytext::scale_x_reordered()# +
   #scale_y_continuous(expand = c(0,0)) +
