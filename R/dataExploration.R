@@ -48,7 +48,8 @@ clinicalTumorType <- clinicalDate |>
                                  str_detect(tumor_type, "breast") ~ "Breast Cancer",
                                  is.na(tumor_type) ~ NA_character_,
                                  TRUE ~ "Other Cancer"),
-         cancer_type = as.factor(cancer_type))
+         cancer_type = as.factor(cancer_type),
+         cancer_type = fct_infreq(cancer_type))
 
 levels(clinicalTumorType$cancer_type)
 
@@ -74,11 +75,11 @@ dataMutation|>
   mutate(gene = fct_lump_min(gene, 10))|>
   count(gene)|>
   ungroup()|>
-  mutate(gene = tidytext::reorder_within(gene, n, cancer_type))|>
+ #mutate(gene = tidytext::reorder_within(gene, n, cancer_type))|>
   filter(gene != "Other")|>
   ggplot(aes(x = gene, y= n))+
   geom_col() +
-  facet_wrap(~cancer_type, scales = "free_y") +
-  tidytext::scale_x_reordered()# +
+  #facet_wrap(~cancer_type, scales = "free_y") +
+  tidytext::scale_x_reordered() +
   #scale_y_continuous(expand = c(0,0)) +
-  #coord_flip()
+  coord_flip()

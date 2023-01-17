@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 data/Pathology_*
+data/data_mutations.txt
+data/data_cna.txt
