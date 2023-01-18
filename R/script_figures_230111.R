@@ -2,9 +2,6 @@ setwd("C:/Users/cmc/Desktop/R_lec/") # error. Use Project
 getwd()
 install.packages(readxl)
 library(readxl)
-
-
-install.packages("ggplot2")
 library(ggplot2)
 
 a=read_excel("scatter_data.xlsx") # error
