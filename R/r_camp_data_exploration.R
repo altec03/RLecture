@@ -14,13 +14,9 @@ clinical |>
 
 library(lubridate)
 
-clinical <- clinical |>
-  select(prescription_date, createDate)|>
-  mutate(prescription_date = lubridate::ymd(prescription_date)) |>
-  mutate(year = year(prescription_date))
 
 clinical <- clinical |>
-  select(prescription_date, createDate)|>
+  #select(prescription_date, createDate)|>
   mutate(prescription_date = lubridate::ymd(prescription_date)) |>
   mutate(presc_year = year(prescription_date),
          presc_month = month(prescription_date),
@@ -47,3 +43,38 @@ clinical |>
   summarise(n())|>
   ggplot(aes(x=year_month, y = `n()`)) +
   geom_line()
+
+clinical |> view()
+
+class(clinical$pathological_dx)
+summary(clinical$pathological_dx)
+
+clinicalTumorType <- clinical |>
+  mutate(diagnosis = as.factor(pathological_dx),
+         cancer_type = str_to_lower(tumor_type),
+         cancer_type = as.factor(cancer_type),
+         cancer_type = case_when(str_detect(cancer_type, "colo|rectal") ~ "Colorectal Cancer",
+                                 str_detect(cancer_type, "lung") ~ "Lung Cancer",
+                                 str_detect(cancer_type, "glioblastoma|glioma|ependymoma|astrocytoma") ~ "Brain Cancer",
+                                 str_detect(cancer_type, "pancrea") ~ "Pancreas Cancer",
+                                 str_detect(cancer_type, "gastric") ~ "Stomach Cancer",
+                                 str_detect(cancer_type, "breast") ~ "Breast Cancer",
+                                 is.na(cancer_type) ~ NA_character_,
+                                 TRUE ~ "Other Cancer"),
+         cancer_type = as.factor(cancer_type),
+         cancer_type = fct_infreq(cancer_type))
+
+clinicalTumorType |>
+  filter(year_month > "2020-10-01") |>
+  ggplot2::ggplot(aes(x=year_month)) + #, color = cancer_type) +
+  #geom_bar()+
+  geom_line(stat = "count")+
+  facet_wrap(vars(cancer_type), ncol = 3) + #, scales = "free_y")+
+  xlab("Year (Monthly)")+
+  ylab("Number of NGS test \n (ThermoFisher)")+
+  theme_minimal()
+
+mutation <- readr::read_csv(here::here("data/Pathology_NGS_mutation.csv"))
+
+data <- mutation |>
+  full_join(clinicalTumorType, by = "pathology_num")

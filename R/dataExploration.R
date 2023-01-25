@@ -37,6 +37,9 @@ clinicalTumorType <- clinicalDate |>
 
 levels(clinicalTumorType$tumor_type)
 
+summary(clinicalTumorType$tumor_type)
+summary(clinicalDate$tumor_type)
+
 clinicalTumorType <- clinicalDate |>
   mutate(tumor_type = as.factor(tumor_type),
          tumor_type = str_to_lower(tumor_type),
@@ -58,7 +61,7 @@ clinicalTumorType |>
   ggplot2::ggplot(aes(x=year_month)) + #, color = cancer_type)) +
   #geom_bar()+
   geom_line(stat = "count")+
-  facet_wrap(vars(cancer_type), ncol = 3)+
+  facet_wrap(vars(cancer_type))+#, scales = "free")+
   xlab("Year (Monthly)")+
   ylab("Number of NGS test \n (ThermoFisher)")+
   theme_minimal()
