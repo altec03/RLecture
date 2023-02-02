@@ -1,6 +1,6 @@
 library(tidyverse)
 
-clinical <- readr::read_csv(here::here("data/Pathology_NGS_1st.csv"))
+clinical <- readr::read_csv(here::here("data/Pathology_NGS_1st.csv"), na = "NULL")
 
 colnames(clinical)
 
@@ -78,3 +78,5 @@ mutation <- readr::read_csv(here::here("data/Pathology_NGS_mutation.csv"))
 
 data <- mutation |>
   full_join(clinicalTumorType, by = "pathology_num")
+
+save(data, file = here::here("RData/data.RData"))
