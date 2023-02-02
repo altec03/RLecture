@@ -157,7 +157,7 @@ dfNested <- data |>
     values_fill = "wild_type"
   ) |>
   select(-"NA")|>
-  full_join(dataTidy, by = "pathology_num")|>
+  left_join(dataTidy, by = "pathology_num")|>
   #colnames()
   pivot_longer(cols = USP9X:PMS1,
                names_to = "gene",
@@ -166,12 +166,13 @@ dfNested <- data |>
   nest()
 
 dataTidy <- data |>
-  select(pathology_num, cancer_type, starts_with("msi"), tumorburden)
+  select(pathology_num, cancer_type, starts_with("msi"), tumorburden)|>
+  distinct_all()
 
 dataNested <- dataTidy |>
   full_join(dfNested, by = "pathology_num")
 
-#save(dfNested, file = here::here("RData/dfNested.RData"))
+save(dfNested, file = here::here("RData/dfNested.RData"))
 
 data |>
   filter(!is.na(pathology_num),!is.na(gene)) |>
@@ -186,5 +187,3 @@ data |>
   )
 
 view()
-
-
