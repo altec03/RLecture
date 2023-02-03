@@ -122,6 +122,14 @@ data <- data |>
     msi_status = factor(msi_status)
   )
 
+geneCount <- data |>
+  count(gene)
+
+data <- data |>
+  left_join(geneCount)
+
+data <- data |>
+  filter(n>20)
 
 data |>
   ggplot(aes(msi_status, msiscore_number)) +
@@ -138,9 +146,6 @@ data |>
     max_TMB = max(tumorburden, na.rm = TRUE)
   )
 
-data |>
-  filter(cancer_type == "Colorectal Cancer",
-         is.na(gene)) |> view()
 
 data |>
   group_by(gene) |>
@@ -154,14 +159,16 @@ dfNested <- data |>
     id_cols = pathology_num,
     names_from = gene,
     values_from = nucleotide_change,
-    values_fill = "wild_type"
+    values_fill = "wild-type"
   ) |>
   select(-"NA")|>
   left_join(dataTidy, by = "pathology_num")|>
   #colnames()
-  pivot_longer(cols = USP9X:PMS1,
+  pivot_longer(cols = TP53:B2M,
                names_to = "gene",
                values_to = "nucleotide_change") |>
+  mutate(nucleotide_change = case_when(nucleotide_change == "wild-type" ~ "wild-type",
+                                       nucleotide_change != "wild-type" ~ "mutant"))|>
   group_by(gene)|>
   nest()
 
@@ -186,4 +193,42 @@ data |>
     values_fill = "wild_type"
   )
 
-view()
+#####################################################
+library(tidyverse)
+load(here::here("RData/dfNested.RData"))
+
+chisq <- dfNested |>
+  mutate(msi_chisq = map(data, ~ chisq.test(.x$cancer_type, .x$nucleotide_change)),
+         tidy_chisq = map(msi_chisq, broom::tidy))|>
+  unnest(tidy_chisq)
+
+chisq |>
+  mutate(gene = as.factor(gene),
+         gene = fct_reorder(gene, p.value)) |>
+  select(gene) |>
+  summary()
+
+chisq |>
+  mutate(significantGene = factor(p.value < 10^-3)) |>
+  ggplot(aes(gene, -log(p.value, base = 10))) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+msi_t.test <- dfNested |>
+  mutate(msi_t.test = map(data, ~ t.test(msiscore_number ~ nucleotide_change, data = .x)),
+         tidy_t.test = map(msi_t.test, broom::tidy),
+         gene = fct_reorder(gene, p.value, mean))|>
+  unnest(tidy_t.test)
+
+msi_t.test |>
+  mutate(significantGene = factor(p.value < 10^-3)) |>
+  ggplot(aes(estimate, -log(p.value, base = 10), label = gene, col = significantGene)) +
+  geom_point() +
+  geom_text()
+
+dfNested$data[3]
+acvr1 <- dfNested$data[dfNested$gene == "ACVR1"][[1]]
+acvr1 |>
+  mutate(mutation = as.factor(nucleotide_change)) |>
+  select(mutation)|>
+  summary()
