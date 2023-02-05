@@ -203,28 +203,47 @@ chisq <- dfNested |>
   unnest(tidy_chisq)
 
 chisq |>
-  mutate(gene = as.factor(gene),
-         gene = fct_reorder(gene, p.value)) |>
+  arrange(p.value)|>
+  mutate(#gene = as.factor(gene),
+         gene = fct_inorder(gene)) |>
   select(gene) |>
-  summary()
+  count()
 
 chisq |>
+  #arrange(p.value)|>
+  #mutate(gene = as.factor(gene),
+  #       gene = fct_inorder(gene)) |>
   mutate(significantGene = factor(p.value < 10^-3)) |>
-  ggplot(aes(gene, -log(p.value, base = 10))) +
+  ggplot(aes(fct_reorder(gene, p.value), -log(p.value, base = 10))) +
   geom_bar(stat = "identity") +
-  coord_flip()
+  coord_flip()+
+  labs(title = "Differently mutated genes among cancer types",
+       subtitle = "Chi-square test",
+       x = "",
+       y = "Minus log 10 transformed p value")
+
 
 msi_t.test <- dfNested |>
-  mutate(msi_t.test = map(data, ~ t.test(msiscore_number ~ nucleotide_change, data = .x)),
-         tidy_t.test = map(msi_t.test, broom::tidy),
-         gene = fct_reorder(gene, p.value, mean))|>
+  unnest()|>
+  #ungroup()|>
+  mutate(log_msi = log1p(msiscore_number))|>
+  group_by(gene)|>
+  nest()|>
+  mutate(msi_t.test = map(data, ~ t.test(log_msi ~ nucleotide_change,
+                                         data = .x)),
+         tidy_t.test = map(msi_t.test, broom::tidy)) |>
+         #gene = fct_reorder(gene, p.value))|>
   unnest(tidy_t.test)
 
 msi_t.test |>
-  mutate(significantGene = factor(p.value < 10^-3)) |>
+  mutate(significantGene = factor(p.value < 10^-2)) |>
   ggplot(aes(estimate, -log(p.value, base = 10), label = gene, col = significantGene)) +
-  geom_point() +
-  geom_text()
+  #geom_point() +
+  geom_text(size = 2.0)+
+  labs(title = "MSI score difference related genes",
+       subtitle = "T test",
+       x = "Difference",
+       y = "Minus log 10 transformed p value")
 
 dfNested$data[3]
 acvr1 <- dfNested$data[dfNested$gene == "ACVR1"][[1]]
