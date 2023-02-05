@@ -245,6 +245,9 @@ msi_t.test |>
        x = "Difference",
        y = "Minus log 10 transformed p value")
 
+msi_t.test|>pull(msi_t.test)|>head(2)
+
+colnames(msi_t.test)
 dfNested$data[3]
 acvr1 <- dfNested$data[dfNested$gene == "ACVR1"][[1]]
 acvr1 |>
