@@ -65,6 +65,7 @@ clinicalTumorType |>
 ```
 
 ---
+
 ```{r}
 load(here::here("RData/dfNested.RData"))
 
@@ -81,6 +82,7 @@ chisq |>
   ggplot(aes(fct_reorder(gene, p.value), -log(p.value, base = 10))) +
   geom_bar(stat = "identity") +
   coord_flip()+
+  theme(axis.text.y=element_text(size = rel(0.6)))+
   labs(title = "Differently mutated genes among cancer types",
        subtitle = "Chi-square test",
        x = "",
@@ -89,6 +91,7 @@ chisq |>
 ```
 
 ---
+
 ```{r}
 
 msi_t.test <- dfNested |>
