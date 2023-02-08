@@ -1,7 +1,8 @@
+RData/data.RData
+data/Pathology_*
+data/data_mutations.txt
+data/data_cna.txt
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-data/Pathology_*
-data/data_mutations.txt
-data/data_cna.txt
