@@ -183,26 +183,39 @@ data |>
 library(tidyverse)
 load(here::here("RData/dfNested.RData"))
 
+tp53 <- dfNested|>
+  pull(data)|>
+  purrr::pluck(1)
+
+tp53 <- dfNested|>
+  #pull(data)|>
+  purrr::pluck("data", 1)
+
+chisq_tp53 <- chisq.test(tp53$cancer_type, tp53$nucleotide_change)
+
+str(chisq_tp53)
+
+chisq_tp53 |> pluck("p.value")
+
+map(dfNested$data, function(x) chisq.test(x$cancer_type, x$nucleotide_change))
+
+
+
+chisq <- dfNested |>
+  mutate(msi_chisq = map(data, ~ chisq.test(.x$cancer_type, .x$nucleotide_change)),
+         p.value = map(msi_chisq, pluck("p.value")))
+
 chisq <- dfNested |>
   mutate(msi_chisq = map(data, ~ chisq.test(.x$cancer_type, .x$nucleotide_change)),
          tidy_chisq = map(msi_chisq, broom::tidy))|>
   unnest(tidy_chisq)
 
 chisq |>
-  arrange(p.value)|>
-  mutate(#gene = as.factor(gene),
-         gene = fct_inorder(gene)) |>
-  select(gene) |>
-  count()
-
-chisq |>
-  #arrange(p.value)|>
-  #mutate(gene = as.factor(gene),
-  #       gene = fct_inorder(gene)) |>
-  mutate(significantGene = factor(p.value < 10^-3)) |>
+  #mutate(significantGene = factor(p.value < 10^-3)) |>
   ggplot(aes(fct_reorder(gene, p.value), -log(p.value, base = 10))) +
   geom_bar(stat = "identity") +
   coord_flip()+
+  theme(axis.text.y=element_text(size = rel(0.6)))+
   labs(title = "Differently mutated genes among cancer types",
        subtitle = "Chi-square test",
        x = "",
@@ -230,28 +243,5 @@ msi_t.test |>
        x = "Difference",
        y = "Minus log 10 transformed p value")
 
-msi_t.test|>pull(msi_t.test)|>head(2)
 
-colnames(msi_t.test)
-dfNested$data[3]
-acvr1 <- dfNested$data[dfNested$gene == "ACVR1"][[1]]
-acvr1 |>
-  mutate(mutation = as.factor(nucleotide_change)) |>
-  select(mutation)|>
-  summary()
-
-dataMutation|>
-  mutate(gene = as.factor(gene))|>
-  group_by(cancer_type)|>
-  mutate(gene = fct_lump_min(gene, 10))|>
-  count(gene)|>
-  ungroup()|>
- #mutate(gene = tidytext::reorder_within(gene, n, cancer_type))|>
-  filter(gene != "Other")|>
-  ggplot(aes(x = gene, y= n))+
-  geom_col() +
-  #facet_wrap(~cancer_type, scales = "free_y") +
-  tidytext::scale_x_reordered() +
-  #scale_y_continuous(expand = c(0,0)) +
-  coord_flip()
 

@@ -81,6 +81,7 @@ data <- mutation |>
 
 skimr::skim(data)
 
+load(here::here("RData/dfNested.RData"))
 dfNested |> str()
 
 dfNested[[2]][[1]]
